@@ -1,6 +1,6 @@
 import processing.video.*;
 
-Capture video;
+Capture video;  //captura de la wecam
 
 void setup() {
 
@@ -8,7 +8,7 @@ void setup() {
   noStroke();
   textSize(28);
 
-  video = new Capture(this, 640, 480);
+  video = new Capture(this, 640, 480); //captura de la webcam
   video.start();
 
 }
