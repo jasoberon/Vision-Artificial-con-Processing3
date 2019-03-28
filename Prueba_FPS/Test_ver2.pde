@@ -3,6 +3,13 @@
 
 import processing.video.*;
 import controlP5.*;
+
+import processing.serial.*;
+import cc.arduino.*;
+
+Arduino arduino;
+int ledPin = 13;
+
 Capture video;  // Variable para captura de webcam
 color trackColor; // variable para guardar color seleccionado
 ControlP5 cp5;
@@ -21,7 +28,12 @@ void setup() {
           .setSize(100, 10);
           
   // Prueba, sigue color rojo
-  trackColor = color(0, 0, 0); //inicia detectando color Rojo 255,0,0
+  trackColor = color(0, 0, 0); //inicia detectando color Rojo 255,0,0 
+  
+    //println(Arduino.list());
+  arduino = new Arduino(this, Arduino.list()[0], 57600);
+  arduino.pinMode(ledPin, Arduino.OUTPUT);
+  
 }
 
 void captureEvent(Capture video) {
@@ -60,10 +72,19 @@ void draw() {
         stroke(255);
         strokeWeight(1);
         point(x,y);
+        //println(x,y);
         avgX += x;
         avgY += y;
         count++;
-           
+     /*     
+           if(x>140 && x<180){
+             if(y>100 && y<140){
+              arduino.digitalWrite(ledPin, Arduino.HIGH);
+              //delay(1000); 
+             }
+           }
+           arduino.digitalWrite(ledPin, Arduino.LOW);
+         */  
       }
     }
   }
@@ -76,11 +97,20 @@ void draw() {
     fill(trackColor);
     strokeWeight(2.0);
     stroke(0);
-    ellipse(avgX, avgY, avgX/2, avgY/2);
-    println(avgX,avgY);
+    ellipse(avgX, avgY, 8, 8);
+    //println(avgX,avgY);
    }
 }
 /*
+void draw()
+{
+  arduino.digitalWrite(ledPin, Arduino.HIGH);
+  delay(1000);
+  arduino.digitalWrite(ledPin, Arduino.LOW);
+  delay(1000);
+}
+
+
 void mousePressed() {    // Guarda color seleccionado por el mouse
   int loc = mouseX + mouseY*video.width;
   trackColor = video.pixels[loc];
